@@ -5,6 +5,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "util": "^0.12.5"
   }
 }

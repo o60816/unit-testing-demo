@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as util from "util";
 
 const plus = (a: number, b: number) => {
   return a + b;
@@ -65,3 +66,31 @@ function calculateHighOrderFunc(func: IOperator['calculate'], num1: number, num2
 }
 
 console.log(cal.calculate(1, 2), calculateHighOrderFunc(plusOperator.calculate.bind(plusOperator), 1, 2), calculateHighOrderFunc((num1: number, num2: number)=>{ return plusOperator.calculate(num1, num2)}, 1, 2));
+
+
+const setRequestTo = (method: string, path: string, data: object)=>{
+  return `${method} request to ${path}, payload: ${util.inspect(data, false, null, true)}`
+}
+
+// Generate util functions
+
+// Utilize curry function
+const reqestCurry = _.curry(setRequestTo);
+const getRequestToCurry = reqestCurry('get');
+const getUserCurry = getRequestToCurry('/user');
+
+// Utilize partial application
+const getRequestToPartialApplication = (path: string, data: object) => {
+  return setRequestTo('get', path, data);
+}
+
+const getUserPartialApplication = (data: object) => {
+  return getRequestToPartialApplication('/user', data);
+}
+
+// Utilize bind
+const getRequestToBind = setRequestTo.bind(setRequestTo, 'get');
+const getUserBind = getRequestToBind.bind(getRequestToBind, '/user');
+
+const userData = {user_id: '1'};
+console.log(getUserCurry(userData), getUserPartialApplication(userData), getUserBind(userData));
